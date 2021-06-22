@@ -60,16 +60,6 @@ export const getAbility = (
   context: HookContext, 
   options?: Pick<AuthorizeHookOptions, "ability" | "checkAbilityForInternal">
 ): Promise<AnyAbility|undefined> => {
-  // if params.ability is set, return it over options.ability
-  if (context?.params?.ability) { 
-    if (typeof context.params.ability === "function") {
-      const ability = context.params.ability(context);
-      return Promise.resolve(ability);
-    } else {
-      return Promise.resolve(context.params.ability);
-    }
-  }
-
   if (!options.checkAbilityForInternal && !context.params?.provider) {
     return Promise.resolve(undefined);
   }
@@ -82,7 +72,18 @@ export const getAbility = (
       return Promise.resolve(options.ability);
     }
   }
-  
+
+  // Disable context.params.ability
+/*
+  if (context?.params?.ability) { 
+    if (typeof context.params.ability === "function") {
+      const ability = context.params.ability(context);
+      return Promise.resolve(ability);
+    } else {
+      return Promise.resolve(context.params.ability);
+    }
+  }
+*/
   return Promise.resolve(undefined);
 };
 
